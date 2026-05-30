@@ -1,0 +1,25 @@
+{
+  "profile": {
+    "name": "Akshay Gupta",
+    "location": "Toronto, ON",
+    "resumeUrl": "/resume.pdf",
+    "roles": [
+      "\"Making the impossible, possible.\""
+    ],
+    "education": "Software Engineering @ uWaterloo"
+  },
+  "links": [
+    {
+      "name": "GitHub",
+      "url": "https://github.com/AkshayG99"
+    },
+    {
+      "name": "LinkedIn",
+      "url": "https://www.linkedin.com/in/akshay-m-gupta"
+    },
+    {
+      "name": "akshaymohangupta0@gmail.com",
+      "url": "mailto:akshaymohangupta0@gmail.com"
+    }
+  ]
+}

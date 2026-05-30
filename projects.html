@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="All award winning projects by Sean Yang. Technical specs, code methodologies, GNNs, ML platforms, and try-on software.">
+  <title>All Projects | Sean Yang</title>
+  <!-- Google Fonts: Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body class="light-mode">
+  <!-- Interactive Voronoi Canvas Background -->
+  <canvas id="voronoi-canvas"></canvas>
+
+
+
+  <!-- Main Grid Page Layout -->
+  <main class="page-container projects-wide-container" style="margin-top: 40px;">
+    
+    <!-- BACK NAVIGATION -->
+    <a href="/index.html" class="back-link">
+      <span>←</span> Back to Home
+    </a>
+
+    <!-- PAGE HEADER -->
+    <header class="header-section" style="padding-bottom: 10px;">
+      <h1 class="dump-title">All Projects</h1>
+    </header>
+
+    <hr class="section-divider" style="margin-bottom: 30px;">
+
+    <!-- ALL PROJECTS LIST DUMP -->
+    <section class="dump-project-list" id="all-projects-list">
+      <!-- Dynamically Populated from content/projects/*.md -->
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- FOOTER SECTION -->
+    <footer class="footer-section">
+      <div class="footer-left">
+        <span class="co2-metric">0.02 g CO<sub>2</sub> / view</span>
+      </div>
+      
+      <div class="footer-right">
+      </div>
+    </footer>
+  </main>
+  <!-- Full-Screen Content Modal -->
+  <div class="modal-backdrop" id="content-modal" aria-hidden="true">
+    <div class="modal-container">
+      <button class="modal-close-btn" id="modal-close-btn" aria-label="Close modal">&times;</button>
+      <div class="modal-header">
+        <div class="modal-meta-row">
+          <span class="modal-date" id="modal-date"></span>
+          <span class="modal-loc" id="modal-loc"></span>
+        </div>
+        <h2 class="modal-title" id="modal-title"></h2>
+        <p class="modal-subtitle" id="modal-subtitle"></p>
+        <div class="badge-row" id="modal-badges"></div>
+        <div class="modal-actions-row" id="modal-actions"></div>
+      </div>
+      <hr class="modal-divider">
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- Marked Markdown Parser via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <!-- Projects Page Logic -->
+  <script type="module" src="/projects.js"></script>
+</body>
+</html>
