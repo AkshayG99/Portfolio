@@ -3,34 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Sean Yang - Robotics Engineer & Sustainable Urbanist. Portfolio featuring robotics perception and prediction systems, simulation platforms, and software engineering projects.">
-  <title>Sean Yang | Robotics Engineer</title>
-  <!-- Google Fonts: Outfit -->
+  <meta name="description" content="Akshay Gupta | Software Engineering @ uWaterloo">
+  <title>Akshay Gupta | Software Engineering @ uWaterloo</title>
+  <!-- Google Fonts: Space Grotesk & Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
 </head>
 <body class="light-mode">
-  <!-- Interactive Voronoi Canvas Background -->
-  <canvas id="voronoi-canvas"></canvas>
+  <!-- Interactive Flow Field Canvas Background -->
+  <canvas id="flow-canvas"></canvas>
 
   <!-- Interactive Controls Widget (Top Right) -->
-  <div class="voronoi-controls-container" aria-label="Voronoi simulation settings">
+  <div class="flow-controls-container" aria-label="Simulation settings">
     <div class="control-header">
-      <span class="control-title">Interactive Voronoi ↗</span>
+      <span class="control-title">Interactive Flows ↗</span>
     </div>
     <div class="control-row">
-      <label for="point-count-slider" class="control-label">points</label>
-      <input type="range" id="point-count-slider" min="10" max="100" value="45">
+      <label for="particle-count-slider" class="control-label">particles</label>
+      <input type="range" id="particle-count-slider" min="100" max="800" value="400">
     </div>
     <div class="control-row">
-      <label for="relaxation-slider" class="control-label">relaxation</label>
-      <input type="range" id="relaxation-slider" min="0" max="8" value="2">
+      <label for="influence-slider" class="control-label">influence</label>
+      <input type="range" id="influence-slider" min="1" max="10" value="5">
     </div>
     <div class="control-row">
       <label for="speed-slider" class="control-label">speed</label>
-      <input type="range" id="speed-slider" min="0" max="10" value="3">
+      <input type="range" id="speed-slider" min="0" max="10" value="4">
     </div>
     <div class="control-buttons">
       <button id="regenerate-btn" class="control-btn">regenerate</button>
@@ -75,124 +75,85 @@
           <div class="companion-container" id="companion-widget" aria-label="Interactive virtual companion">
             <div class="companion-bubble" id="companion-bubble"></div>
             <div class="companion-character" id="companion-character" style="display: flex; gap: 4px; align-items: flex-end;">
-              <!-- Hamster 1 (Gold, Bounce) -->
+              <!-- Robot 1 (Gold, Bounce) -->
               <div class="dance-bounce" style="display: inline-flex;">
-                <svg class="hamster-svg" viewBox="0 0 100 100" width="24" height="24">
-                  <circle cx="30" cy="30" r="10" fill="#e5a65d" />
-                  <circle cx="30" cy="30" r="6" fill="#f3c2a6" />
-                  <circle cx="70" cy="30" r="10" fill="#e5a65d" />
-                  <circle cx="70" cy="30" r="6" fill="#f3c2a6" />
-                  <ellipse cx="50" cy="65" rx="30" ry="25" fill="#e5a65d" />
-                  <ellipse cx="50" cy="70" rx="18" ry="14" fill="#faf0e6" />
-                  <ellipse cx="50" cy="48" rx="25" ry="20" fill="#e5a65d" />
-                  <circle cx="32" cy="54" r="6" fill="#ffb6c1" />
-                  <circle cx="68" cy="54" r="6" fill="#ffb6c1" />
-                  <circle cx="40" cy="45" r="5" fill="#ffffff" class="eye-outer"/>
-                  <circle cx="60" cy="45" r="5" fill="#ffffff" class="eye-outer"/>
-                  <circle cx="40" cy="45" r="3" fill="#1c1917" class="eye-pupil left-pupil" />
-                  <circle cx="60" cy="45" r="3" fill="#1c1917" class="eye-pupil right-pupil" />
-                  <path d="M 35 45 Q 40 50, 45 45" stroke="#1c1917" stroke-width="1.5" fill="none" class="sleeping-eye left-sleeping-eye"/>
-                  <path d="M 55 45 Q 60 50, 65 45" stroke="#1c1917" stroke-width="1.5" fill="none" class="sleeping-eye right-sleeping-eye"/>
-                  <polygon points="48,50 52,50 50,53" fill="#dd6b20" />
-                  <path d="M 48 56 Q 50 58, 52 56" stroke="#dd6b20" stroke-width="1.5" fill="none" />
-                  <circle cx="35" cy="78" r="5" fill="#f3c2a6" />
-                  <circle cx="65" cy="78" r="5" fill="#f3c2a6" />
+                <svg class="robot-svg" viewBox="0 0 100 100" width="24" height="24">
+                  <ellipse cx="50" cy="80" rx="15" ry="6" fill="#f59e0b" opacity="0.7" />
+                  <ellipse cx="50" cy="80" rx="8" ry="3" fill="#ffffff" />
+                  <rect x="25" y="30" width="50" height="40" rx="12" fill="#475569" stroke="#1e293b" stroke-width="3" />
+                  <rect x="32" y="36" width="36" height="24" rx="6" fill="#0f172a" />
+                  <circle cx="43" cy="48" r="3.5" fill="#22d3ee" class="eye-outer" />
+                  <circle cx="43" cy="48" r="1.5" fill="#ffffff" class="eye-pupil left-pupil" />
+                  <circle cx="57" cy="48" r="3.5" fill="#22d3ee" class="eye-outer" />
+                  <circle cx="57" cy="48" r="1.5" fill="#ffffff" class="eye-pupil right-pupil" />
+                  <path d="M 39 48 Q 43 51, 47 48" stroke="#22d3ee" stroke-width="2" fill="none" class="sleeping-eye left-sleeping-eye" style="display:none;" />
+                  <path d="M 53 48 Q 57 51, 61 48" stroke="#22d3ee" stroke-width="2" fill="none" class="sleeping-eye right-sleeping-eye" style="display:none;" />
+                  <line x1="50" y1="30" x2="50" y2="18" stroke="#1e293b" stroke-width="3" />
+                  <circle cx="50" cy="15" r="4.5" fill="#ef4444" />
+                  <path d="M 18 45 C 10 40, 10 50, 18 50 Z" fill="#94a3b8" stroke="#1e293b" stroke-width="2" />
+                  <path d="M 82 45 C 90 40, 90 50, 82 50 Z" fill="#94a3b8" stroke="#1e293b" stroke-width="2" />
                 </svg>
               </div>
-              <!-- Hamster 2 (Grey, Sway) -->
+              <!-- Robot 2 (Grey, Sway) -->
               <div class="dance-sway" style="display: inline-flex;">
-                <svg class="hamster-svg" viewBox="0 0 100 100" width="24" height="24">
-                  <circle cx="30" cy="30" r="10" fill="#a1a1aa" />
-                  <circle cx="30" cy="30" r="6" fill="#e4e4e7" />
-                  <circle cx="70" cy="30" r="10" fill="#a1a1aa" />
-                  <circle cx="70" cy="30" r="6" fill="#e4e4e7" />
-                  <ellipse cx="50" cy="65" rx="30" ry="25" fill="#a1a1aa" />
-                  <ellipse cx="50" cy="70" rx="18" ry="14" fill="#faf0e6" />
-                  <ellipse cx="50" cy="48" rx="25" ry="20" fill="#a1a1aa" />
-                  <circle cx="32" cy="54" r="6" fill="#ffb6c1" />
-                  <circle cx="68" cy="54" r="6" fill="#ffb6c1" />
-                  <circle cx="40" cy="45" r="5" fill="#ffffff" class="eye-outer"/>
-                  <circle cx="60" cy="45" r="5" fill="#ffffff" class="eye-outer"/>
-                  <circle cx="40" cy="45" r="3" fill="#1c1917" class="eye-pupil left-pupil" />
-                  <circle cx="60" cy="45" r="3" fill="#1c1917" class="eye-pupil right-pupil" />
-                  <path d="M 35 45 Q 40 50, 45 45" stroke="#1c1917" stroke-width="1.5" fill="none" class="sleeping-eye left-sleeping-eye"/>
-                  <path d="M 55 45 Q 60 50, 65 45" stroke="#1c1917" stroke-width="1.5" fill="none" class="sleeping-eye right-sleeping-eye"/>
-                  <polygon points="48,50 52,50 50,53" fill="#dd6b20" />
-                  <path d="M 48 56 Q 50 58, 52 56" stroke="#dd6b20" stroke-width="1.5" fill="none" />
-                  <circle cx="35" cy="78" r="5" fill="#e4e4e7" />
-                  <circle cx="65" cy="78" r="5" fill="#e4e4e7" />
+                <svg class="robot-svg" viewBox="0 0 100 100" width="24" height="24">
+                  <rect x="30" y="25" width="40" height="48" rx="8" fill="#64748b" stroke="#1e293b" stroke-width="3" />
+                  <rect x="36" y="32" width="28" height="15" rx="3" fill="#1e293b" />
+                  <ellipse cx="50" cy="39" rx="10" ry="3.5" fill="#a855f7" class="eye-outer" />
+                  <circle cx="50" cy="39" r="1.5" fill="#ffffff" class="eye-pupil left-pupil" />
+                  <path d="M 44 39 Q 50 42, 56 39" stroke="#a855f7" stroke-width="2" fill="none" class="sleeping-eye left-sleeping-eye" style="display:none;" />
+                  <rect x="45" y="73" width="10" height="6" fill="#334155" />
+                  <ellipse cx="50" cy="80" rx="16" ry="7" fill="#1e293b" />
+                  <ellipse cx="50" cy="80" rx="10" ry="3" fill="#475569" />
+                  <path d="M 30 35 L 20 28" stroke="#1e293b" stroke-width="2" />
+                  <circle cx="18" cy="26" r="3" fill="#a855f7" />
+                  <path d="M 70 35 L 80 28" stroke="#1e293b" stroke-width="2" />
+                  <circle cx="82" cy="26" r="3" fill="#a855f7" />
                 </svg>
               </div>
-              <!-- Hamster 3 (Cream, Spin) -->
+              <!-- Robot 3 (Teal, Spin) -->
               <div class="dance-spin" style="display: inline-flex;">
-                <svg class="hamster-svg" viewBox="0 0 100 100" width="24" height="24">
-                  <circle cx="30" cy="30" r="10" fill="#f5ebd5" />
-                  <circle cx="30" cy="30" r="6" fill="#fdfcf7" />
-                  <circle cx="70" cy="30" r="10" fill="#f5ebd5" />
-                  <circle cx="70" cy="30" r="6" fill="#fdfcf7" />
-                  <ellipse cx="50" cy="65" rx="30" ry="25" fill="#f5ebd5" />
-                  <ellipse cx="50" cy="70" rx="18" ry="14" fill="#faf0e6" />
-                  <ellipse cx="50" cy="48" rx="25" ry="20" fill="#f5ebd5" />
-                  <circle cx="32" cy="54" r="6" fill="#ffb6c1" />
-                  <circle cx="68" cy="54" r="6" fill="#ffb6c1" />
-                  <circle cx="40" cy="45" r="5" fill="#ffffff" class="eye-outer"/>
-                  <circle cx="60" cy="45" r="5" fill="#ffffff" class="eye-outer"/>
-                  <circle cx="40" cy="45" r="3" fill="#1c1917" class="eye-pupil left-pupil" />
-                  <circle cx="60" cy="45" r="3" fill="#1c1917" class="eye-pupil right-pupil" />
-                  <path d="M 35 45 Q 40 50, 45 45" stroke="#1c1917" stroke-width="1.5" fill="none" class="sleeping-eye left-sleeping-eye"/>
-                  <path d="M 55 45 Q 60 50, 65 45" stroke="#1c1917" stroke-width="1.5" fill="none" class="sleeping-eye right-sleeping-eye"/>
-                  <polygon points="48,50 52,50 50,53" fill="#dd6b20" />
-                  <path d="M 48 56 Q 50 58, 52 56" stroke="#dd6b20" stroke-width="1.5" fill="none" />
-                  <circle cx="35" cy="78" r="5" fill="#fdfcf7" />
-                  <circle cx="65" cy="78" r="5" fill="#fdfcf7" />
+                <svg class="robot-svg" viewBox="0 0 100 100" width="24" height="24">
+                  <polygon points="50,15 20,70 80,70" fill="#475569" stroke="#1e293b" stroke-width="3" />
+                  <circle cx="50" cy="46" r="12" fill="#0f172a" stroke="#1e293b" stroke-width="2" />
+                  <circle cx="50" cy="46" r="9" fill="#10b981" class="eye-outer" />
+                  <circle cx="50" cy="46" r="3.5" fill="#ffffff" class="eye-pupil left-pupil" />
+                  <path d="M 44 46 Q 50 51, 56 46" stroke="#10b981" stroke-width="2" fill="none" class="sleeping-eye left-sleeping-eye" style="display:none;" />
+                  <rect x="30" y="70" width="10" height="8" rx="2" fill="#1e293b" />
+                  <rect x="60" y="70" width="10" height="8" rx="2" fill="#1e293b" />
+                  <polygon points="30,78 40,78 35,88" fill="#ef4444" opacity="0.8" />
+                  <polygon points="60,78 70,78 65,88" fill="#ef4444" opacity="0.8" />
                 </svg>
               </div>
-              <!-- Hamster 4 (Brown, Wiggle) -->
+              <!-- Robot 4 (Orange, Wiggle) -->
               <div class="dance-wiggle" style="display: inline-flex;">
-                <svg class="hamster-svg" viewBox="0 0 100 100" width="24" height="24">
-                  <circle cx="30" cy="30" r="10" fill="#a87850" />
-                  <circle cx="30" cy="30" r="6" fill="#edd6c4" />
-                  <circle cx="70" cy="30" r="10" fill="#a87850" />
-                  <circle cx="70" cy="30" r="6" fill="#edd6c4" />
-                  <ellipse cx="50" cy="65" rx="30" ry="25" fill="#a87850" />
-                  <ellipse cx="50" cy="70" rx="18" ry="14" fill="#faf0e6" />
-                  <ellipse cx="50" cy="48" rx="25" ry="20" fill="#a87850" />
-                  <circle cx="32" cy="54" r="6" fill="#ffb6c1" />
-                  <circle cx="68" cy="54" r="6" fill="#ffb6c1" />
-                  <circle cx="40" cy="45" r="5" fill="#ffffff" class="eye-outer"/>
-                  <circle cx="60" cy="45" r="5" fill="#ffffff" class="eye-outer"/>
-                  <circle cx="40" cy="45" r="3" fill="#1c1917" class="eye-pupil left-pupil" />
-                  <circle cx="60" cy="45" r="3" fill="#1c1917" class="eye-pupil right-pupil" />
-                  <path d="M 35 45 Q 40 50, 45 45" stroke="#1c1917" stroke-width="1.5" fill="none" class="sleeping-eye left-sleeping-eye"/>
-                  <path d="M 55 45 Q 60 50, 65 45" stroke="#1c1917" stroke-width="1.5" fill="none" class="sleeping-eye right-sleeping-eye"/>
-                  <polygon points="48,50 52,50 50,53" fill="#dd6b20" />
-                  <path d="M 48 56 Q 50 58, 52 56" stroke="#dd6b20" stroke-width="1.5" fill="none" />
-                  <circle cx="35" cy="78" r="5" fill="#edd6c4" />
-                  <circle cx="65" cy="78" r="5" fill="#edd6c4" />
+                <svg class="robot-svg" viewBox="0 0 100 100" width="24" height="24">
+                  <rect x="20" y="65" width="60" height="15" rx="7" fill="#1e293b" stroke="#1e293b" stroke-width="2" />
+                  <circle cx="28" cy="72.5" r="4.5" fill="#94a3b8" />
+                  <circle cx="50" cy="72.5" r="4.5" fill="#94a3b8" />
+                  <circle cx="72" cy="72.5" r="4.5" fill="#94a3b8" />
+                  <rect x="28" y="25" width="44" height="40" rx="6" fill="#334155" stroke="#1e293b" stroke-width="3" />
+                  <rect x="34" y="32" width="32" height="16" rx="4" fill="#0f172a" />
+                  <rect x="38" y="37" width="8" height="6" rx="1" fill="#f59e0b" class="eye-outer" />
+                  <circle cx="42" cy="40" r="1.5" fill="#0f172a" class="eye-pupil left-pupil" />
+                  <rect x="54" y="37" width="8" height="6" rx="1" fill="#f59e0b" class="eye-outer" />
+                  <circle cx="58" cy="40" r="1.5" fill="#0f172a" class="eye-pupil right-pupil" />
+                  <path d="M 37 40 L 45 40" stroke="#f59e0b" stroke-width="1.5" fill="none" class="sleeping-eye left-sleeping-eye" style="display:none;" />
+                  <path d="M 53 40 L 61 40" stroke="#f59e0b" stroke-width="1.5" fill="none" class="sleeping-eye right-sleeping-eye" style="display:none;" />
+                  <path d="M 28 45 L 16 45 Q 12 40, 16 35" stroke="#1e293b" stroke-width="2" fill="none" />
+                  <path d="M 72 45 L 84 45 Q 88 40, 84 35" stroke="#1e293b" stroke-width="2" fill="none" />
                 </svg>
               </div>
-              <!-- Hamster 5 (Rosy, Roll) -->
+              <!-- Robot 5 (Teal Sphere, Roll) -->
               <div class="dance-roll" style="display: inline-flex;">
-                <svg class="hamster-svg" viewBox="0 0 100 100" width="24" height="24">
-                  <circle cx="30" cy="30" r="10" fill="#e39c8f" />
-                  <circle cx="30" cy="30" r="6" fill="#f6dfda" />
-                  <circle cx="70" cy="30" r="10" fill="#e39c8f" />
-                  <circle cx="70" cy="30" r="6" fill="#f6dfda" />
-                  <ellipse cx="50" cy="65" rx="30" ry="25" fill="#e39c8f" />
-                  <ellipse cx="50" cy="70" rx="18" ry="14" fill="#faf0e6" />
-                  <ellipse cx="50" cy="48" rx="25" ry="20" fill="#e39c8f" />
-                  <circle cx="32" cy="54" r="6" fill="#ffb6c1" />
-                  <circle cx="68" cy="54" r="6" fill="#ffb6c1" />
-                  <circle cx="40" cy="45" r="5" fill="#ffffff" class="eye-outer"/>
-                  <circle cx="60" cy="45" r="5" fill="#ffffff" class="eye-outer"/>
-                  <circle cx="40" cy="45" r="3" fill="#1c1917" class="eye-pupil left-pupil" />
-                  <circle cx="60" cy="45" r="3" fill="#1c1917" class="eye-pupil right-pupil" />
-                  <path d="M 35 45 Q 40 50, 45 45" stroke="#1c1917" stroke-width="1.5" fill="none" class="sleeping-eye left-sleeping-eye"/>
-                  <path d="M 55 45 Q 60 50, 65 45" stroke="#1c1917" stroke-width="1.5" fill="none" class="sleeping-eye right-sleeping-eye"/>
-                  <polygon points="48,50 52,50 50,53" fill="#dd6b20" />
-                  <path d="M 48 56 Q 50 58, 52 56" stroke="#dd6b20" stroke-width="1.5" fill="none" />
-                  <circle cx="35" cy="78" r="5" fill="#f6dfda" />
-                  <circle cx="65" cy="78" r="5" fill="#f6dfda" />
+                <svg class="robot-svg" viewBox="0 0 100 100" width="24" height="24">
+                  <circle cx="50" cy="62" r="24" fill="#cbd5e1" stroke="#1e293b" stroke-width="3" />
+                  <circle cx="50" cy="62" r="14" fill="none" stroke="#22d3ee" stroke-width="2" />
+                  <line x1="50" y1="38" x2="50" y2="86" stroke="#1e293b" stroke-width="2" />
+                  <path d="M 32 36 A 18 18 0 0 1 68 36 Z" fill="#94a3b8" stroke="#1e293b" stroke-width="3" />
+                  <circle cx="50" cy="30" r="4.5" fill="#22d3ee" class="eye-outer" />
+                  <circle cx="50" cy="30" r="1.5" fill="#ffffff" class="eye-pupil left-pupil" />
+                  <path d="M 46 30 Q 50 33, 54 30" stroke="#22d3ee" stroke-width="2" fill="none" class="sleeping-eye left-sleeping-eye" style="display:none;" />
                 </svg>
               </div>
             </div>
@@ -201,7 +162,7 @@
       </div>
 
       <div class="header-headshot-col">
-        <img src="/headshot.jpg" alt="Sean Yang Headshot" class="header-headshot">
+        <img src="/headshot.jpg" alt="Akshay Gupta Headshot" class="header-headshot">
       </div>
     </header>
 
@@ -246,113 +207,84 @@
 
     <hr class="section-divider">
 
-    <!-- DANCING HAMSTERS SECTION -->
-    <div class="hamster-stage">
-      <div class="hamster-stage-label" id="hamster-label">Click the hamsters to speed up the beat! ⚡</div>
-      <div class="hamster-row" id="hamster-dance-row">
-        <div class="hamster-dancer dance-bounce">
-          <svg class="hamster-svg" viewBox="0 0 100 100" width="48" height="48">
-            <circle cx="30" cy="30" r="10" fill="#e5a65d" />
-            <circle cx="30" cy="30" r="6" fill="#f3c2a6" />
-            <circle cx="70" cy="30" r="10" fill="#e5a65d" />
-            <circle cx="70" cy="30" r="6" fill="#f3c2a6" />
-            <ellipse cx="50" cy="65" rx="30" ry="25" fill="#e5a65d" />
-            <ellipse cx="50" cy="70" rx="18" ry="14" fill="#faf0e6" />
-            <ellipse cx="50" cy="48" rx="25" ry="20" fill="#e5a65d" />
-            <circle cx="32" cy="54" r="6" fill="#ffb6c1" />
-            <circle cx="68" cy="54" r="6" fill="#ffb6c1" />
-            <circle cx="40" cy="45" r="3" fill="#1c1917" />
-            <circle cx="60" cy="45" r="3" fill="#1c1917" />
-            <circle cx="39" cy="44" r="1" fill="#ffffff" />
-            <circle cx="59" cy="44" r="1" fill="#ffffff" />
-            <polygon points="48,50 52,50 50,53" fill="#dd6b20" />
-            <path d="M 48 56 Q 50 58, 52 56" stroke="#dd6b20" stroke-width="1.5" fill="none" />
-            <circle cx="35" cy="78" r="5" fill="#f3c2a6" />
-            <circle cx="65" cy="78" r="5" fill="#f3c2a6" />
+    <!-- DANCING ROBOTS SECTION -->
+    <div class="robot-stage">
+      <div class="robot-stage-label" id="robot-label">Click the robots to overclock their cores! ⚡</div>
+      <div class="robot-row" id="robot-dance-row">
+        <div class="robot-dancer dance-bounce">
+          <svg class="robot-svg" viewBox="0 0 100 100" width="48" height="48">
+            <ellipse cx="50" cy="80" rx="15" ry="6" fill="#f59e0b" opacity="0.7" />
+            <ellipse cx="50" cy="80" rx="8" ry="3" fill="#ffffff" />
+            <rect x="25" y="30" width="50" height="40" rx="12" fill="#475569" stroke="#1e293b" stroke-width="3" />
+            <rect x="32" y="36" width="36" height="24" rx="6" fill="#0f172a" />
+            <circle cx="43" cy="48" r="3.5" fill="#22d3ee" class="eye-outer" />
+            <circle cx="43" cy="48" r="1.5" fill="#ffffff" class="eye-pupil left-pupil" />
+            <circle cx="57" cy="48" r="3.5" fill="#22d3ee" class="eye-outer" />
+            <circle cx="57" cy="48" r="1.5" fill="#ffffff" class="eye-pupil right-pupil" />
+            <path d="M 39 48 Q 43 51, 47 48" stroke="#22d3ee" stroke-width="2" fill="none" class="sleeping-eye left-sleeping-eye" style="display:none;" />
+            <path d="M 53 48 Q 57 51, 61 48" stroke="#22d3ee" stroke-width="2" fill="none" class="sleeping-eye right-sleeping-eye" style="display:none;" />
+            <line x1="50" y1="30" x2="50" y2="18" stroke="#1e293b" stroke-width="3" />
+            <circle cx="50" cy="15" r="4.5" fill="#ef4444" />
+            <path d="M 18 45 C 10 40, 10 50, 18 50 Z" fill="#94a3b8" stroke="#1e293b" stroke-width="2" />
+            <path d="M 82 45 C 90 40, 90 50, 82 50 Z" fill="#94a3b8" stroke="#1e293b" stroke-width="2" />
           </svg>
         </div>
-        <div class="hamster-dancer dance-sway">
-          <svg class="hamster-svg" viewBox="0 0 100 100" width="48" height="48">
-            <circle cx="30" cy="30" r="10" fill="#e5a65d" />
-            <circle cx="30" cy="30" r="6" fill="#f3c2a6" />
-            <circle cx="70" cy="30" r="10" fill="#e5a65d" />
-            <circle cx="70" cy="30" r="6" fill="#f3c2a6" />
-            <ellipse cx="50" cy="65" rx="30" ry="25" fill="#e5a65d" />
-            <ellipse cx="50" cy="70" rx="18" ry="14" fill="#faf0e6" />
-            <ellipse cx="50" cy="48" rx="25" ry="20" fill="#e5a65d" />
-            <circle cx="32" cy="54" r="6" fill="#ffb6c1" />
-            <circle cx="68" cy="54" r="6" fill="#ffb6c1" />
-            <circle cx="40" cy="45" r="3" fill="#1c1917" />
-            <circle cx="60" cy="45" r="3" fill="#1c1917" />
-            <circle cx="39" cy="44" r="1" fill="#ffffff" />
-            <circle cx="59" cy="44" r="1" fill="#ffffff" />
-            <polygon points="48,50 52,50 50,53" fill="#dd6b20" />
-            <path d="M 48 56 Q 50 58, 52 56" stroke="#dd6b20" stroke-width="1.5" fill="none" />
-            <circle cx="35" cy="78" r="5" fill="#f3c2a6" />
-            <circle cx="65" cy="78" r="5" fill="#f3c2a6" />
+        <div class="robot-dancer dance-sway">
+          <svg class="robot-svg" viewBox="0 0 100 100" width="48" height="48">
+            <rect x="30" y="25" width="40" height="48" rx="8" fill="#64748b" stroke="#1e293b" stroke-width="3" />
+            <rect x="36" y="32" width="28" height="15" rx="3" fill="#1e293b" />
+            <ellipse cx="50" cy="39" rx="10" ry="3.5" fill="#a855f7" class="eye-outer" />
+            <circle cx="50" cy="39" r="1.5" fill="#ffffff" class="eye-pupil left-pupil" />
+            <path d="M 44 39 Q 50 42, 56 39" stroke="#a855f7" stroke-width="2" fill="none" class="sleeping-eye left-sleeping-eye" style="display:none;" />
+            <rect x="45" y="73" width="10" height="6" fill="#334155" />
+            <ellipse cx="50" cy="80" rx="16" ry="7" fill="#1e293b" />
+            <ellipse cx="50" cy="80" rx="10" ry="3" fill="#475569" />
+            <path d="M 30 35 L 20 28" stroke="#1e293b" stroke-width="2" />
+            <circle cx="18" cy="26" r="3" fill="#a855f7" />
+            <path d="M 70 35 L 80 28" stroke="#1e293b" stroke-width="2" />
+            <circle cx="82" cy="26" r="3" fill="#a855f7" />
           </svg>
         </div>
-        <div class="hamster-dancer dance-spin">
-          <svg class="hamster-svg" viewBox="0 0 100 100" width="48" height="48">
-            <circle cx="30" cy="30" r="10" fill="#e5a65d" />
-            <circle cx="30" cy="30" r="6" fill="#f3c2a6" />
-            <circle cx="70" cy="30" r="10" fill="#e5a65d" />
-            <circle cx="70" cy="30" r="6" fill="#f3c2a6" />
-            <ellipse cx="50" cy="65" rx="30" ry="25" fill="#e5a65d" />
-            <ellipse cx="50" cy="70" rx="18" ry="14" fill="#faf0e6" />
-            <ellipse cx="50" cy="48" rx="25" ry="20" fill="#e5a65d" />
-            <circle cx="32" cy="54" r="6" fill="#ffb6c1" />
-            <circle cx="68" cy="54" r="6" fill="#ffb6c1" />
-            <circle cx="40" cy="45" r="3" fill="#1c1917" />
-            <circle cx="60" cy="45" r="3" fill="#1c1917" />
-            <circle cx="39" cy="44" r="1" fill="#ffffff" />
-            <circle cx="59" cy="44" r="1" fill="#ffffff" />
-            <polygon points="48,50 52,50 50,53" fill="#dd6b20" />
-            <path d="M 48 56 Q 50 58, 52 56" stroke="#dd6b20" stroke-width="1.5" fill="none" />
-            <circle cx="35" cy="78" r="5" fill="#f3c2a6" />
-            <circle cx="65" cy="78" r="5" fill="#f3c2a6" />
+        <div class="robot-dancer dance-spin">
+          <svg class="robot-svg" viewBox="0 0 100 100" width="48" height="48">
+            <polygon points="50,15 20,70 80,70" fill="#475569" stroke="#1e293b" stroke-width="3" />
+            <circle cx="50" cy="46" r="12" fill="#0f172a" stroke="#1e293b" stroke-width="2" />
+            <circle cx="50" cy="46" r="9" fill="#10b981" class="eye-outer" />
+            <circle cx="50" cy="46" r="3.5" fill="#ffffff" class="eye-pupil left-pupil" />
+            <path d="M 44 46 Q 50 51, 56 46" stroke="#10b981" stroke-width="2" fill="none" class="sleeping-eye left-sleeping-eye" style="display:none;" />
+            <rect x="30" y="70" width="10" height="8" rx="2" fill="#1e293b" />
+            <rect x="60" y="70" width="10" height="8" rx="2" fill="#1e293b" />
+            <polygon points="30,78 40,78 35,88" fill="#ef4444" opacity="0.8" />
+            <polygon points="60,78 70,78 65,88" fill="#ef4444" opacity="0.8" />
           </svg>
         </div>
-        <div class="hamster-dancer dance-wiggle">
-          <svg class="hamster-svg" viewBox="0 0 100 100" width="48" height="48">
-            <circle cx="30" cy="30" r="10" fill="#e5a65d" />
-            <circle cx="30" cy="30" r="6" fill="#f3c2a6" />
-            <circle cx="70" cy="30" r="10" fill="#e5a65d" />
-            <circle cx="70" cy="30" r="6" fill="#f3c2a6" />
-            <ellipse cx="50" cy="65" rx="30" ry="25" fill="#e5a65d" />
-            <ellipse cx="50" cy="70" rx="18" ry="14" fill="#faf0e6" />
-            <ellipse cx="50" cy="48" rx="25" ry="20" fill="#e5a65d" />
-            <circle cx="32" cy="54" r="6" fill="#ffb6c1" />
-            <circle cx="68" cy="54" r="6" fill="#ffb6c1" />
-            <circle cx="40" cy="45" r="3" fill="#1c1917" />
-            <circle cx="60" cy="45" r="3" fill="#1c1917" />
-            <circle cx="39" cy="44" r="1" fill="#ffffff" />
-            <circle cx="59" cy="44" r="1" fill="#ffffff" />
-            <polygon points="48,50 52,50 50,53" fill="#dd6b20" />
-            <path d="M 48 56 Q 50 58, 52 56" stroke="#dd6b20" stroke-width="1.5" fill="none" />
-            <circle cx="35" cy="78" r="5" fill="#f3c2a6" />
-            <circle cx="65" cy="78" r="5" fill="#f3c2a6" />
+        <div class="robot-dancer dance-wiggle">
+          <svg class="robot-svg" viewBox="0 0 100 100" width="48" height="48">
+            <rect x="20" y="65" width="60" height="15" rx="7" fill="#1e293b" stroke="#1e293b" stroke-width="2" />
+            <circle cx="28" cy="72.5" r="4.5" fill="#94a3b8" />
+            <circle cx="50" cy="72.5" r="4.5" fill="#94a3b8" />
+            <circle cx="72" cy="72.5" r="4.5" fill="#94a3b8" />
+            <rect x="28" y="25" width="44" height="40" rx="6" fill="#334155" stroke="#1e293b" stroke-width="3" />
+            <rect x="34" y="32" width="32" height="16" rx="4" fill="#0f172a" />
+            <rect x="38" y="37" width="8" height="6" rx="1" fill="#f59e0b" class="eye-outer" />
+            <circle cx="42" cy="40" r="1.5" fill="#0f172a" class="eye-pupil left-pupil" />
+            <rect x="54" y="37" width="8" height="6" rx="1" fill="#f59e0b" class="eye-outer" />
+            <circle cx="58" cy="40" r="1.5" fill="#0f172a" class="eye-pupil right-pupil" />
+            <path d="M 37 40 L 45 40" stroke="#f59e0b" stroke-width="1.5" fill="none" class="sleeping-eye left-sleeping-eye" style="display:none;" />
+            <path d="M 53 40 L 61 40" stroke="#f59e0b" stroke-width="1.5" fill="none" class="sleeping-eye right-sleeping-eye" style="display:none;" />
+            <path d="M 28 45 L 16 45 Q 12 40, 16 35" stroke="#1e293b" stroke-width="2" fill="none" />
+            <path d="M 72 45 L 84 45 Q 88 40, 84 35" stroke="#1e293b" stroke-width="2" fill="none" />
           </svg>
         </div>
-        <div class="hamster-dancer dance-roll">
-          <svg class="hamster-svg" viewBox="0 0 100 100" width="48" height="48">
-            <circle cx="30" cy="30" r="10" fill="#e5a65d" />
-            <circle cx="30" cy="30" r="6" fill="#f3c2a6" />
-            <circle cx="70" cy="30" r="10" fill="#e5a65d" />
-            <circle cx="70" cy="30" r="6" fill="#f3c2a6" />
-            <ellipse cx="50" cy="65" rx="30" ry="25" fill="#e5a65d" />
-            <ellipse cx="50" cy="70" rx="18" ry="14" fill="#faf0e6" />
-            <ellipse cx="50" cy="48" rx="25" ry="20" fill="#e5a65d" />
-            <circle cx="32" cy="54" r="6" fill="#ffb6c1" />
-            <circle cx="68" cy="54" r="6" fill="#ffb6c1" />
-            <circle cx="40" cy="45" r="3" fill="#1c1917" />
-            <circle cx="60" cy="45" r="3" fill="#1c1917" />
-            <circle cx="39" cy="44" r="1" fill="#ffffff" />
-            <circle cx="59" cy="44" r="1" fill="#ffffff" />
-            <polygon points="48,50 52,50 50,53" fill="#dd6b20" />
-            <path d="M 48 56 Q 50 58, 52 56" stroke="#dd6b20" stroke-width="1.5" fill="none" />
-            <circle cx="35" cy="78" r="5" fill="#f3c2a6" />
-            <circle cx="65" cy="78" r="5" fill="#f3c2a6" />
+        <div class="robot-dancer dance-roll">
+          <svg class="robot-svg" viewBox="0 0 100 100" width="48" height="48">
+            <circle cx="50" cy="62" r="24" fill="#cbd5e1" stroke="#1e293b" stroke-width="3" />
+            <circle cx="50" cy="62" r="14" fill="none" stroke="#22d3ee" stroke-width="2" />
+            <line x1="50" y1="38" x2="50" y2="86" stroke="#1e293b" stroke-width="2" />
+            <path d="M 32 36 A 18 18 0 0 1 68 36 Z" fill="#94a3b8" stroke="#1e293b" stroke-width="3" />
+            <circle cx="50" cy="30" r="4.5" fill="#22d3ee" class="eye-outer" />
+            <circle cx="50" cy="30" r="1.5" fill="#ffffff" class="eye-pupil left-pupil" />
+            <path d="M 46 30 Q 50 33, 54 30" stroke="#22d3ee" stroke-width="2" fill="none" class="sleeping-eye left-sleeping-eye" style="display:none;" />
           </svg>
         </div>
       </div>

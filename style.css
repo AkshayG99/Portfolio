@@ -2,39 +2,40 @@
 
 /* --- Typography and Variables --- */
 :root {
-  /* Colors (Light Theme default) */
-  --bg-color: #faf6ee;
-  --text-color: #3d2a1c;
-  --accent-color: #5a6b47;
-  --accent-rgb: 90, 107, 71;
-  --text-muted: #806e5d;
-  --border-color: #eadecd;
-  --badge-bg: #f2e7d7;
-  --badge-bg-hover: #e6dab8;
-  --code-bg: #f4edd9;
-  --card-bg-hover: rgba(90, 107, 71, 0.04);
-  --canvas-line: #f1e9d8;
-  --canvas-dot: #8c7965;
+  /* Colors (Light Theme default - Clean Slate & Cobalt) */
+  --bg-color: #f8fafc;
+  --text-color: #0f172a;
+  --accent-color: #4f46e5;
+  --accent-rgb: 79, 70, 229;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+  --badge-bg: #f1f5f9;
+  --badge-bg-hover: #e2e8f0;
+  --code-bg: #f1f5f9;
+  --card-bg-hover: rgba(79, 70, 229, 0.03);
+  --canvas-line: rgba(79, 70, 229, 0.04);
+  --canvas-dot: rgba(79, 70, 229, 0.15);
 
   /* Font configuration */
-  --font-main: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-title: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, SF Mono, Menlo, Monaco, Consolas, monospace;
 }
 
 .dark-mode {
-  /* Colors (Dark/High Contrast Theme - Forest Obsidian) */
-  --bg-color: #0b0d0c;
-  --text-color: #e2e8e4;
-  --accent-color: #8db890;
-  --accent-rgb: 141, 184, 144;
-  --text-muted: #7fa183;
-  --border-color: #1e2621;
-  --badge-bg: #141b17;
-  --badge-bg-hover: #1b241f;
-  --code-bg: #111714;
-  --card-bg-hover: rgba(141, 184, 144, 0.04);
-  --canvas-line: #131815;
-  --canvas-dot: #48614c;
+  /* Colors (Dark/High Contrast Theme - Nebula Slate & Teal) */
+  --bg-color: #030712;
+  --text-color: #f3f4f6;
+  --accent-color: #06b6d4;
+  --accent-rgb: 6, 182, 212;
+  --text-muted: #94a3b8;
+  --border-color: #1f2937;
+  --badge-bg: #111827;
+  --badge-bg-hover: #1f2937;
+  --code-bg: #0b0f19;
+  --card-bg-hover: rgba(6, 182, 212, 0.03);
+  --canvas-line: rgba(6, 182, 212, 0.04);
+  --canvas-dot: rgba(6, 182, 212, 0.2);
 }
 
 /* --- Reset & Base Styles --- */
@@ -62,8 +63,13 @@ body {
   padding: 40px 20px;
 }
 
+h1, h2, h3, h4, h5, h6, .control-title {
+  font-family: var(--font-title);
+  letter-spacing: -0.01em;
+}
+
 /* --- Background Canvas --- */
-#voronoi-canvas {
+#flow-canvas {
   position: fixed;
   top: 0;
   left: 0;
@@ -73,15 +79,15 @@ body {
   pointer-events: auto; /* enable mouse tracking */
 }
 
-/* --- Voronoi Controls Widget (Top Right) --- */
-.voronoi-controls-container {
+/* --- Flow Field Controls Widget (Top Right) --- */
+.flow-controls-container {
   position: absolute;
   top: 20px;
   right: 20px;
-  background-color: rgba(250, 246, 238, 0.85);
-  backdrop-filter: blur(8px);
+  background-color: rgba(248, 250, 252, 0.85);
+  backdrop-filter: blur(12px);
   border: 1px solid var(--border-color);
-  border-radius: 6px;
+  border-radius: 8px;
   padding: 12px 16px;
   width: 200px;
   z-index: 100;
@@ -91,8 +97,8 @@ body {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
 }
 
-.dark-mode .voronoi-controls-container {
-  background-color: rgba(11, 13, 12, 0.85);
+.dark-mode .flow-controls-container {
+  background-color: rgba(3, 7, 18, 0.85);
 }
 
 .control-header {
@@ -229,8 +235,8 @@ body {
 }
 
 .dark-mode .maze-cell.cell-wall {
-  background-color: #1e2621;
-  border-color: #1e2621;
+  background-color: #1e2937;
+  border-color: #1e2937;
 }
 
 .maze-cell.cell-start {
@@ -354,17 +360,24 @@ body {
 .header-headshot {
   width: 110px;
   height: 110px;
-  border-radius: 50%;
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
   object-fit: cover;
   border: 3px solid var(--border-color);
-  transition: border-color 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+  transition: border-color 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-radius 0.3s ease;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+  animation: morphBlob 8s ease-in-out infinite;
+}
+
+@keyframes morphBlob {
+  0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+  50% { border-radius: 40% 60% 70% 30% / 50% 60% 40% 50%; }
+  100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
 }
 
 .header-headshot:hover {
   border-color: var(--accent-color);
-  transform: scale(1.1) translateY(-6px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  transform: scale(1.08) rotate(2deg);
+  box-shadow: 0 10px 25px rgba(var(--accent-rgb), 0.15);
 }
 
 .main-title {
@@ -591,7 +604,7 @@ body {
   transform: scale(1.05);
 }
 
-.companion-svg .sleeping-eye {
+.robot-svg .sleeping-eye {
   display: none;
 }
 
@@ -1229,7 +1242,7 @@ body {
     justify-content: center;
   }
 
-  .voronoi-controls-container {
+  .flow-controls-container {
     position: relative;
     top: 0;
     right: 0;
@@ -1546,8 +1559,8 @@ body {
   }
 }
 
-/* Hamster Dance Stage */
-.hamster-stage {
+/* Robot Dance Stage */
+.robot-stage {
   margin-top: 50px;
   padding: 24px;
   border: 1px dashed var(--border-color);
@@ -1561,7 +1574,7 @@ body {
   transition: all 0.3s ease;
 }
 
-.hamster-stage-label {
+.robot-stage-label {
   font-family: var(--font-mono);
   font-size: 0.78rem;
   color: var(--text-muted);
@@ -1570,7 +1583,7 @@ body {
   transition: color 0.2s ease;
 }
 
-.hamster-row {
+.robot-row {
   display: flex;
   justify-content: center;
   align-items: flex-end;
@@ -1581,88 +1594,78 @@ body {
   padding: 10px 0;
 }
 
-.hamster-dancer {
+.robot-dancer {
   display: flex;
   align-items: center;
   justify-content: center;
   transition: transform 0.2s ease;
 }
 
-.hamster-dancer:hover {
+.robot-dancer:hover {
   transform: scale(1.15);
 }
 
 /* Dancing Animations */
 .dance-bounce {
-  animation: hamster-dance-bounce 0.8s infinite ease-in-out;
+  animation: robot-dance-bounce 0.8s infinite ease-in-out;
 }
 .dance-sway {
-  animation: hamster-dance-sway 0.9s infinite ease-in-out;
+  animation: robot-dance-sway 0.9s infinite ease-in-out;
 }
 .dance-spin {
-  animation: hamster-dance-spin 1.2s infinite cubic-bezier(0.4, 0, 0.2, 1);
+  animation: robot-dance-spin 1.2s infinite cubic-bezier(0.4, 0, 0.2, 1);
 }
 .dance-wiggle {
-  animation: hamster-dance-wiggle 0.6s infinite ease-in-out;
+  animation: robot-dance-wiggle 0.6s infinite ease-in-out;
 }
 .dance-roll {
-  animation: hamster-dance-roll 1.0s infinite ease-in-out;
+  animation: robot-dance-roll 1.0s infinite ease-in-out;
 }
 
 /* Fast Beat Speedups */
-.hamster-row.fast-beat .dance-bounce {
+.robot-row.fast-beat .dance-bounce {
   animation-duration: 0.35s;
 }
-.hamster-row.fast-beat .dance-sway {
+.robot-row.fast-beat .dance-sway {
   animation-duration: 0.4s;
 }
-.hamster-row.fast-beat .dance-spin {
+.robot-row.fast-beat .dance-spin {
   animation-duration: 0.5s;
 }
-.hamster-row.fast-beat .dance-wiggle {
+.robot-row.fast-beat .dance-wiggle {
   animation-duration: 0.25s;
 }
-.hamster-row.fast-beat .dance-roll {
+.robot-row.fast-beat .dance-roll {
   animation-duration: 0.45s;
 }
 
 /* Keyframes */
-@keyframes hamster-dance-bounce {
+@keyframes robot-dance-bounce {
   0%, 100% { transform: translateY(0) rotate(0deg); }
   50% { transform: translateY(-10px) rotate(6deg); }
 }
 
-@keyframes hamster-dance-sway {
+@keyframes robot-dance-sway {
   0%, 100% { transform: translateX(0) rotate(-6deg); }
   50% { transform: translateX(8px) rotate(8deg); }
 }
 
-@keyframes hamster-dance-spin {
+@keyframes robot-dance-spin {
   0%, 100% { transform: scale(1) translateY(0); }
   35% { transform: scale(1.05, 0.95) translateY(0); }
   50% { transform: scale(0.95, 1.05) translateY(-16px) rotate(180deg); }
   70% { transform: scale(1) translateY(0) rotate(360deg); }
 }
 
-@keyframes hamster-dance-wiggle {
+@keyframes robot-dance-wiggle {
   0%, 100% { transform: rotate(0) scaleY(1); }
   25% { transform: rotate(-5deg) scaleY(0.92) skewX(-4deg); }
   75% { transform: rotate(5deg) scaleY(0.92) skewX(4deg); }
 }
 
-@keyframes hamster-dance-roll {
+@keyframes robot-dance-roll {
   0%, 100% { transform: translateY(0) scaleX(1); }
   50% { transform: translateY(-12px) scaleX(-1); }
 }
-
-/* Hamster Colors in Dark Mode compatibility */
-.dark-mode .hamster-svg circle[fill="#e5a65d"],
-.dark-mode .hamster-svg ellipse[fill="#e5a65d"] {
-  fill: #ba8346;
-}
-.dark-mode .hamster-svg ellipse[fill="#faf0e6"] {
-  fill: #eaddcf;
-}
-
 
 

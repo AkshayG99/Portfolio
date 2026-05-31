@@ -25,9 +25,9 @@ async function initApp() {
 
     // Initialize interactive behaviors
     initMarkdownLoader(experiences, projects);
-    initVoronoiBackground();
+    initFlowBackground();
     initVirtualCompanion();
-    initHamsterDance();
+    initRobotDance();
     initDijkstraMaze();
   } catch (error) {
     console.error('Initialization error:', error);
@@ -444,7 +444,6 @@ function initDijkstraMaze() {
   let drawMode = 'wall';
   let isAnimating = false;
 
-  // Build grid DOM
   gridContainer.innerHTML = '';
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
@@ -466,7 +465,6 @@ function initDijkstraMaze() {
       gridContainer.appendChild(cell);
       cellElements[r][c] = cell;
 
-      // Mouse events
       cell.addEventListener('mousedown', (e) => {
         if (isAnimating) return;
         e.preventDefault();
@@ -503,7 +501,6 @@ function initDijkstraMaze() {
     }
   }
 
-  // Global mouseup handling
   const handleMouseUp = () => {
     isDrawing = false;
   };
@@ -667,38 +664,37 @@ function initDijkstraMaze() {
     resetSearchOnly();
   });
 
-  // Randomize the maze by default on load
   randomizeMaze();
 }
 
 /* ==========================================
-   6. INTERACTIVE VORONOI BACKGROUND CANVAS
+   6. INTERACTIVE FLOW FIELD BACKGROUND CANVAS
    ========================================== */
-function initVoronoiBackground() {
-  const canvas = document.getElementById('voronoi-canvas');
+function initFlowBackground() {
+  const canvas = document.getElementById('flow-canvas');
   if (!canvas) return;
 
   const ctx = canvas.getContext('2d');
   
-  const countSlider = document.getElementById('point-count-slider');
-  const relaxSlider = document.getElementById('relaxation-slider');
+  const countSlider = document.getElementById('particle-count-slider');
+  const influenceSlider = document.getElementById('influence-slider');
   const speedSlider = document.getElementById('speed-slider');
   const regenBtn = document.getElementById('regenerate-btn');
 
   let width = canvas.width = window.innerWidth;
   let height = canvas.height = window.innerHeight;
-  let points = [];
+  let particles = [];
   
-  let numPoints = countSlider ? parseInt(countSlider.value) : 45;
-  let relaxation = relaxSlider ? parseInt(relaxSlider.value) / 10 : 0.2;
-  let speedFactor = speedSlider ? parseInt(speedSlider.value) / 3 : 1.0;
+  let maxParticles = countSlider ? parseInt(countSlider.value) : 400;
+  let mouseInfluence = influenceSlider ? parseInt(influenceSlider.value) : 5;
+  let baseSpeed = speedSlider ? parseInt(speedSlider.value) / 4 : 1.0;
   
   let mouse = { x: -1000, y: -1000, active: false };
 
   window.addEventListener('resize', () => {
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
-    generatePoints();
+    generateParticles();
   });
 
   window.addEventListener('mousemove', (e) => {
@@ -715,185 +711,142 @@ function initVoronoiBackground() {
 
   if (countSlider) {
     countSlider.addEventListener('input', () => {
-      numPoints = parseInt(countSlider.value);
-      generatePoints();
+      maxParticles = parseInt(countSlider.value);
+      generateParticles();
     });
   }
-  if (relaxSlider) {
-    relaxSlider.addEventListener('input', () => {
-      relaxation = parseInt(relaxSlider.value) / 10;
+  if (influenceSlider) {
+    influenceSlider.addEventListener('input', () => {
+      mouseInfluence = parseInt(influenceSlider.value);
     });
   }
   if (speedSlider) {
     speedSlider.addEventListener('input', () => {
-      speedFactor = parseInt(speedSlider.value) / 3;
+      baseSpeed = parseInt(speedSlider.value) / 4;
     });
   }
   if (regenBtn) {
     regenBtn.addEventListener('click', () => {
-      generatePoints();
+      generateParticles();
     });
   }
 
-  function generatePoints() {
-    points = [];
-    for (let i = 0; i < numPoints; i++) {
-      points.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 1.2,
-        vy: (Math.random() - 0.5) * 1.2
-      });
+  class Particle {
+    constructor() {
+      this.reset(true);
+    }
+
+    reset(initiallyRandom = false) {
+      this.x = Math.random() * width;
+      this.y = initiallyRandom ? Math.random() * height : (Math.random() > 0.5 ? 0 : height);
+      this.vx = (Math.random() - 0.5) * 0.8;
+      this.vy = (Math.random() - 0.5) * 0.8;
+      this.radius = Math.random() * 1.5 + 0.8;
+      this.alpha = Math.random() * 0.4 + 0.1;
+      this.life = Math.random() * 200 + 100;
+    }
+
+    update() {
+      let angle = Math.sin(this.x * 0.005) * Math.cos(this.y * 0.005) * Math.PI * 2;
+      
+      this.vx += Math.cos(angle) * 0.05 * baseSpeed;
+      this.vy += Math.sin(angle) * 0.05 * baseSpeed;
+
+      if (mouse.active) {
+        let dx = mouse.x - this.x;
+        let dy = mouse.y - this.y;
+        let dist = Math.hypot(dx, dy);
+        let maxDist = mouseInfluence * 40;
+
+        if (dist < maxDist) {
+          let force = (1 - dist / maxDist) * 0.15;
+          let orbitAngle = Math.atan2(dy, dx) + Math.PI / 2;
+          this.vx += Math.cos(orbitAngle) * force;
+          this.vy += Math.sin(orbitAngle) * force;
+          
+          this.vx += (dx / dist) * force * 0.2;
+          this.vy += (dy / dist) * force * 0.2;
+        }
+      }
+
+      this.x += this.vx * baseSpeed;
+      this.y += this.vy * baseSpeed;
+      this.vx *= 0.95;
+      this.vy *= 0.95;
+
+      this.life--;
+
+      if (this.x < 0 || this.x > width || this.y < 0 || this.y > height || this.life <= 0) {
+        this.reset();
+      }
+    }
+
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      
+      const style = getComputedStyle(document.body);
+      const dotColor = style.getPropertyValue('--canvas-dot').trim() || 'rgba(79, 70, 229, 0.15)';
+      ctx.fillStyle = dotColor.replace('0.15', this.alpha.toFixed(2)).replace('0.2', this.alpha.toFixed(2));
+      ctx.fill();
     }
   }
 
-  function clipPolygon(poly, M, D) {
-    const result = [];
-    if (poly.length === 0) return result;
-
-    function isInside(pt) {
-      return (M.x - pt.x) * D.x + (M.y - pt.y) * D.y >= -1e-6;
+  function generateParticles() {
+    particles = [];
+    for (let i = 0; i < maxParticles; i++) {
+      particles.push(new Particle());
     }
+  }
 
-    function getIntersection(A, B) {
-      const num = (M.x - A.x) * D.x + (M.y - A.y) * D.y;
-      const den = (B.x - A.x) * D.x + (B.y - A.y) * D.y;
-      if (Math.abs(den) < 1e-9) return A;
-      const t = num / den;
-      return {
-        x: A.x + t * (B.x - A.x),
-        y: A.y + t * (B.y - A.y)
-      };
-    }
+  generateParticles();
 
-    for (let i = 0; i < poly.length; i++) {
-      const A = poly[i];
-      const B = poly[(i + 1) % poly.length];
+  function drawConnections() {
+    const style = getComputedStyle(document.body);
+    ctx.lineWidth = 0.6;
 
-      const A_in = isInside(A);
-      const B_in = isInside(B);
-
-      if (A_in) {
-        if (B_in) {
-          result.push(B);
-        } else {
-          result.push(getIntersection(A, B));
-        }
-      } else {
-        if (B_in) {
-          result.push(getIntersection(A, B));
-          result.push(B);
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        let p1 = particles[i];
+        let p2 = particles[j];
+        let dist = Math.hypot(p1.x - p2.x, p1.y - p2.y);
+        
+        if (dist < 60) {
+          let alpha = (1 - dist / 60) * 0.12 * Math.min(p1.alpha, p2.alpha);
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
+          ctx.lineTo(p2.x, p2.y);
+          const accentRgb = style.getPropertyValue('--accent-rgb').trim() || '79, 70, 229';
+          ctx.strokeStyle = `rgba(${accentRgb}, ${alpha})`;
+          ctx.stroke();
         }
       }
     }
-    return result;
   }
-
-  function getCentroid(poly) {
-    let area = 0;
-    let cx = 0;
-    let cy = 0;
-    const k = poly.length;
-    
-    for (let i = 0; i < k; i++) {
-      const A = poly[i];
-      const B = poly[(i + 1) % k];
-      
-      const factor = (A.x * B.y - B.x * A.y);
-      area += factor;
-      cx += (A.x + B.x) * factor;
-      cy += (A.y + B.y) * factor;
-    }
-    
-    area = area / 2.0;
-    if (Math.abs(area) < 1e-6) {
-      let sx = 0, sy = 0;
-      poly.forEach(p => { sx += p.x; sy += p.y; });
-      return { x: sx / k, y: sy / k };
-    }
-    
-    return {
-      x: cx / (6.0 * area),
-      y: cy / (6.0 * area)
-    };
-  }
-
-  generatePoints();
 
   function loop() {
     ctx.clearRect(0, 0, width, height);
 
-    const style = getComputedStyle(document.body);
-    const lineColor = style.getPropertyValue('--canvas-line').trim() || '#f1e9d8';
-    const dotColor = style.getPropertyValue('--canvas-dot').trim() || '#8c7965';
-
-    points.forEach(p => {
-      p.x += p.vx * speedFactor;
-      p.y += p.vy * speedFactor;
-
-      if (p.x < 0) { p.x = 0; p.vx = -p.vx; }
-      if (p.x > width) { p.x = width; p.vx = -p.vx; }
-      if (p.y < 0) { p.y = 0; p.vy = -p.vy; }
-      if (p.y > height) { p.y = height; p.vy = -p.vy; }
+    particles.forEach(p => {
+      p.update();
+      p.draw();
     });
 
-    let activeSites = points.map((p, idx) => ({ x: p.x, y: p.y, isMouse: false, originalIndex: idx }));
+    drawConnections();
+
     if (mouse.active) {
-      activeSites.push({ x: mouse.x, y: mouse.y, isMouse: true });
-    }
-
-    const box = [
-      { x: 0, y: 0 },
-      { x: width, y: 0 },
-      { x: width, y: height },
-      { x: 0, y: height }
-    ];
-
-    activeSites.forEach((site, i) => {
-      let cellPoly = [...box];
-
-      for (let j = 0; j < activeSites.length; j++) {
-        if (i === j) continue;
-        const other = activeSites[j];
-
-        const M = {
-          x: (site.x + other.x) / 2,
-          y: (site.y + other.y) / 2
-        };
-
-        const D = {
-          x: other.x - site.x,
-          y: other.y - site.y
-        };
-
-        cellPoly = clipPolygon(cellPoly, M, D);
-        if (cellPoly.length === 0) break;
-      }
-
-      if (cellPoly.length > 0) {
-        ctx.beginPath();
-        ctx.moveTo(cellPoly[0].x, cellPoly[0].y);
-        for (let k = 1; k < cellPoly.length; k++) {
-          ctx.lineTo(cellPoly[k].x, cellPoly[k].y);
-        }
-        ctx.closePath();
-        ctx.strokeStyle = lineColor;
-        ctx.lineWidth = 1;
-        ctx.stroke();
-
-        if (relaxation > 0 && !site.isMouse) {
-          const centroid = getCentroid(cellPoly);
-          const orig = points[site.originalIndex];
-          orig.x = orig.x * (1 - relaxation) + centroid.x * relaxation;
-          orig.y = orig.y * (1 - relaxation) + centroid.y * relaxation;
-        }
-      }
+      ctx.beginPath();
+      ctx.arc(mouse.x, mouse.y, 4, 0, Math.PI * 2);
+      ctx.fillStyle = 'var(--accent-color)';
+      ctx.fill();
 
       ctx.beginPath();
-      ctx.arc(site.x, site.y, site.isMouse ? 3.5 : 1.5, 0, 2 * Math.PI);
-      ctx.fillStyle = site.isMouse ? 'var(--accent-color)' : dotColor;
-      ctx.fill();
-    });
+      ctx.arc(mouse.x, mouse.y, mouseInfluence * 20, 0, Math.PI * 2);
+      const accentRgb = getComputedStyle(document.body).getPropertyValue('--accent-rgb').trim() || '79, 70, 229';
+      ctx.strokeStyle = `rgba(${accentRgb}, 0.04)`;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
 
     requestAnimationFrame(loop);
   }
@@ -902,7 +855,7 @@ function initVoronoiBackground() {
 }
 
 /* ==========================================
-   7. INTERACTIVE PIXEL PET COMPANION
+   7. INTERACTIVE PIXEL BOT COMPANION
    ========================================== */
 function initVirtualCompanion() {
   const companion = document.getElementById('companion-widget');
@@ -913,16 +866,16 @@ function initVirtualCompanion() {
   if (!companion || !character || !bubble) return;
 
   const dialogues = [
-    "Hi! We are Akshay's 5 dancing hamsters! 🐹🐹🐹🐹🐹",
-    "Click us to see us dance and wiggle! 💃",
-    "Akshay is probably writing clean code right now... 💻",
-    "Make the impossible, possible! ✨",
+    "Hi! We are Akshay's 5 helper drones! 🤖🤖🤖🤖🤖",
+    "Click us to overclock our processors! ⚡",
+    "Scanning codebase... all parameters nominal! 💻",
+    "Making the impossible, possible. Beep! ✨",
     "Have you checked out the projects page? 📐",
-    "We love dancing beside the quote! 🎈",
-    "If you leave us alone, we might fall asleep... 💤",
-    "Waterloo SE represents! 🦁",
-    "Dark mode looks so cozy here in Forest Obsidian 🌲",
-    "Squeak! Have a wonderful day! 😊"
+    "Our central core represents Waterloo SE! 🦁",
+    "Low battery... entering sleep mode... zzz 💤",
+    "Overclocking complete. Ready for tasks! 🚀",
+    "Dark mode looks so cozy here in Nebula Slate 🌌",
+    "Beep boop! Have a wonderful day! 😊"
   ];
 
   let dialogueIndex = 0;
@@ -937,19 +890,16 @@ function initVirtualCompanion() {
     
     dialogueIndex = (dialogueIndex + 1) % dialogues.length;
     
-    // Auto-hide bubble after 4 seconds
     bubbleTimeout = setTimeout(() => {
       bubble.classList.remove('active');
     }, 4000);
   }
 
   function playAnimation() {
-    // Randomly choose an animation class: wiggle, jump, spin
     const animations = ['wiggle', 'jump', 'spin'];
     const randomAnim = animations[Math.floor(Math.random() * animations.length)];
     
     character.classList.remove('wiggle', 'jump', 'spin');
-    // Force reflow
     void character.offsetWidth;
     
     character.classList.add(randomAnim);
@@ -959,16 +909,13 @@ function initVirtualCompanion() {
     }, 600);
   }
 
-  // Wake up companion
   function wakeUp() {
     if (companion.classList.contains('sleeping')) {
       companion.classList.remove('sleeping');
-      // Clear any Zzz particles
       const particles = companion.querySelectorAll('.zzz-particle');
       particles.forEach(p => p.remove());
       
-      // Briefly show dialogue
-      bubble.textContent = "Yawn... Back to dancing! ☀️💃";
+      bubble.textContent = "System online. Core warm-up! ☀️🤖";
       bubble.classList.add('active');
       clearTimeout(bubbleTimeout);
       bubbleTimeout = setTimeout(() => {
@@ -977,18 +924,14 @@ function initVirtualCompanion() {
     }
   }
 
-  // Go to sleep companion
   function goSleep() {
     companion.classList.add('sleeping');
     bubble.classList.remove('active');
     
-    // Clear old intervals
     clearInterval(zzzInterval);
-    // Spawn Zzz particles every 2 seconds
     zzzInterval = setInterval(spawnZzz, 2000);
   }
 
-  // Spawn Zzz particles
   function spawnZzz() {
     if (!companion.classList.contains('sleeping')) return;
     const zzz = document.createElement('span');
@@ -1006,7 +949,6 @@ function initVirtualCompanion() {
     }, 2500);
   }
 
-  // Reset idle timer on any mouse move / interaction
   function resetIdleTimer() {
     clearTimeout(idleTimer);
     if (companion.classList.contains('sleeping')) {
@@ -1015,17 +957,15 @@ function initVirtualCompanion() {
     
     idleTimer = setTimeout(() => {
       goSleep();
-    }, 20000); // 20 seconds of no interaction to sleep
+    }, 20000);
   }
 
-  // Event Listeners
   companion.addEventListener('click', () => {
     resetIdleTimer();
     playAnimation();
     showDialogue();
   });
 
-  // Track cursor movement for eye pupils
   window.addEventListener('mousemove', (e) => {
     resetIdleTimer();
     if (companion.classList.contains('sleeping')) return;
@@ -1045,25 +985,24 @@ function initVirtualCompanion() {
     });
   });
 
-  // Start the idle timer
   resetIdleTimer();
 }
 
 /* ==========================================
-   8. DANCING HAMSTERS BEAT ENGINE
+   8. DANCING ROBOTS BEAT ENGINE
    ========================================== */
-function initHamsterDance() {
-  const row = document.getElementById('hamster-dance-row');
-  const label = document.getElementById('hamster-label');
+function initRobotDance() {
+  const row = document.getElementById('robot-dance-row');
+  const label = document.getElementById('robot-label');
   if (!row || !label) return;
 
   row.addEventListener('click', () => {
     const isFast = row.classList.toggle('fast-beat');
     if (isFast) {
-      label.innerHTML = "The beat is dropping! ⚡🔥💃🐹";
+      label.innerHTML = "System overclocked! Cores at 100% capacity! ⚡🔥🤖💾";
       label.style.color = "var(--accent-color)";
     } else {
-      label.innerHTML = "Click the hamsters to speed up the beat! ⚡";
+      label.innerHTML = "Click the robots to overclock their cores! ⚡";
       label.style.color = "";
     }
   });
