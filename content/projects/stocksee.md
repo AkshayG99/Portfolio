@@ -2,7 +2,7 @@
 title: StockSee
 subtitle: Correlating real-world events with stock prices & RL/NLP prediction
 tags: [Python, TensorFlow, Reinforcement Learning, NLP, Node.js, Web API]
-order: 2
+order: 4
 demoUrl: "https://stock-see.vercel.app/"
 githubUrl: "https://github.com/AkshayG99/StockSee"
 ---

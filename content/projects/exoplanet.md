@@ -2,7 +2,7 @@
 title: Exoplanet Habitability
 subtitle: Supervised Machine Learning for Exoplanet Colonization
 tags: [Python, Scikit-Learn, Pandas, NumPy, XGBoost, Matplotlib]
-order: 7
+order: 8
 githubUrl: "https://github.com/AkshayG99/Nasa-Planet-Habitability-Predictions"
 ---
 - Built a supervised machine learning classification model in Python trained on NASA Kepler exoplanet data to predict planetary habitability scores across thousands of candidate planets.

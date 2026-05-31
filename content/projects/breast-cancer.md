@@ -2,7 +2,7 @@
 title: Breast Cancer Detection
 subtitle: Linear Classification Neural Network using TensorFlow
 tags: [Python, TensorFlow, Scikit-Learn, Data Preprocessing, NumPy]
-order: 6
+order: 7
 demoUrl: "https://colab.research.google.com/drive/1Ww5a6xcJuKgIb3x4H4b1nk1VtiM9nMWY?usp=sharing"
 ---
 - Developed a binary **Linear Classification model** in Python using TensorFlow to predict the presence of breast cancer based on patient diagnostic features.

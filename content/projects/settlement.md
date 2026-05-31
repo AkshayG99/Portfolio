@@ -2,7 +2,7 @@
 title: NASA Space Settlement Contest
 subtitle: 3rd out of 26,000+ Competitors
 tags: [SolidWorks, CAD, Gazebo, ROS, FEA, Space Systems]
-order: 5
+order: 6
 demoUrl: "https://drive.google.com/file/d/17DciSptPG8BcOHu2WV_bXq326ZrVe0ez/view?usp=sharing"
 ---
 - Placed **3rd globally** out of over 26,000 students worldwide, achieving international recognition for our innovative space settlement design and robotics logistics.

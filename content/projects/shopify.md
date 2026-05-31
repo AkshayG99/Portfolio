@@ -1,8 +1,8 @@
 ---
-title: ShopFit (Shopify Minis Hackathon)
-subtitle: AI Virtual Try-On Shop Mini
+title: ShopFit
+subtitle: Shopify Hackathon Winner
 tags: [Shop Minis SDK, React, TypeScript, Tailwind, Fal AI]
-order: 3
+order: 2
 demoUrl: "https://www.youtube.com/watch?v=Q2KbmuU6kZI&t=2s"
 githubUrl: "https://github.com/AkshayG99/shopFits"
 ---
